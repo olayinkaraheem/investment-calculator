@@ -1,0 +1,80 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Investment Calculator</title>
+  </head>
+  <body>
+    <div>
+      <form action="" method="post">
+        <label for="sub">
+          subscription Amount:
+          <input
+            type="number"
+            placeholder="Enter your monthly subscription"
+            name="sub"
+            id="amount"
+            required
+        /></label>
+        <label for="tenor">
+          Tenor:
+          <input
+            type="number"
+            placeholder="Enter the tenor"
+            name="tenor"
+            id="tenor"
+            required
+        /></label>
+        <label for="rate">
+          Interest Rate:
+          <input
+            type="number"
+            placeholder="Enter the interest rate"
+            name="rate"
+            id="rate"
+            required
+        /></label>
+        <input type="submit" id="calculate" value="Calculate" />
+      </form>
+    </div>
+    <div id="output"></div>
+
+    <script>
+      const tenor = document.querySelector("#tenor");
+      const amount = document.querySelector("#amount");
+      const rate = document.querySelector("#rate");
+      const calc_btn = document.querySelector("#calculate");
+      const result = document.querySelector("#output");
+
+      const process = (event, tenor, amount, rate) => {
+        event.preventDefault();
+        fetch("localhost:3001/calculate", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            sub: amount,
+            tenor,
+            rate
+          })
+        })
+          .then(response => response.json())
+          .then(output => {
+            console.log(output);
+            /* let to_display = "<table><thead><td>Month</td><td>Opening Balance</td><td>Total Month Interest</td><td>Closing Balance</td>";
+                      for(let i = 0; i < output.length; i++) {
+                          to_display .= "<tr><td></td><"
+                      } */
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      };
+      calc_btn.addEventListener("click", e => {
+        process(e, tenor.value, amount.value, rate.value);
+      });
+    </script>
+  </body>
+</html>
